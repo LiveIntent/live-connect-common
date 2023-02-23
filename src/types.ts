@@ -1,3 +1,15 @@
+export interface ErrorBus {
+  emitErrorWithMessage(name: string, message: string, e?: unknown): this
+  emitError(name: string, exception?: unknown): this
+}
+
+export interface EventBus extends ErrorBus {
+  on<F extends ((event: unknown) => void)>(name: string, callback: F, ctx?: ThisParameterType<F>): this
+  once<F extends ((event: unknown) => void)>(name: string, callback: F, ctx?: ThisParameterType<F>): this
+  emit(name: string, event: unknown): this
+  off(name: string, callback: (event: unknown) => void): this
+}
+
 export interface ExternalReadStorageHandler {
   getCookie?: (key: string) => string | null
   getDataFromLocalStorage?: (key: string) => string | null
