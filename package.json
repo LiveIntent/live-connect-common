@@ -2,7 +2,7 @@
   "author": "LiveIntent",
   "repository": {
     "type": "git",
-    "url": "https://github.com/liveintent-berlin/live-connect-common"
+    "url": "https://github.com/liveintent/live-connect-common"
   },
   "description": "Interfaces and basic functionality for LiveConnect projects",
   "version": "0.1.0-alpha.0",
