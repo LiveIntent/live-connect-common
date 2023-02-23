@@ -1,3 +1,5 @@
+import { ErrorDetails } from './types'
+
 export const UUID = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
 
 const uuidRegex = new RegExp(`^${UUID}$`, 'i')
@@ -57,4 +59,32 @@ export function expiresInDays(expires: number): Date {
 
 export function expiresInHours(expires: number): Date {
   return _expiresIn(expires, 36e5)
+}
+
+export function wrapError(name: string, e?: unknown, message?: string): ErrorDetails {
+  if (isObject(e)) {
+    let error: ErrorDetails
+    if ('message' in e && typeof e.message === 'string') {
+      error = new Error(message || e.message)
+    } else {
+      error = new Error(message)
+    }
+
+    error.name = name
+
+    if ('stack' in e && typeof e.stack === 'string') {
+      error.stack = e.stack
+    }
+    if ('lineNumber' in e && typeof e.lineNumber === 'number') {
+      error.lineNumber = e.lineNumber
+    }
+    if ('columnNumber' in e && typeof e.columnNumber === 'number') {
+      error.columnNumber = e.columnNumber
+    }
+    return error
+  } else {
+    const error = Error(message)
+    error.name = name
+    return error
+  }
 }
