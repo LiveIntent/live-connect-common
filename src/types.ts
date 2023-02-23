@@ -35,3 +35,10 @@ export interface ExternalCallHandler {
     onLoad?: () => void
   ) => void
 }
+
+export interface ErrorDetails extends Error {
+  stackTrace?: string
+  lineNumber?: number
+  columnNumber?: number
+  fileName?: string
+}
