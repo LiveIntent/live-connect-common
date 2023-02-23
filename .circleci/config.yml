@@ -38,7 +38,7 @@ references:
   set_ssh_key: &set_ssh_key
     add_ssh_keys:
       fingerprints:
-        - "17:a6:0f:32:c6:9e:b1:9e:cc:12:e6:d8:2d:9e:57:3e"
+        - "fc:86:a8:4a:4d:ab:a7:8d:e7:b9:45:8f:d3:85:9d:54"
 
   reset_package_lock: &reset_package_lock
     run:
@@ -57,8 +57,14 @@ jobs:
       - *npm_install
       - *save_cache
       - run:
-          name: Run unit tests
-          command: npm run test:unit
+          name: Lint sources
+          command: npm run lint
+      - run:
+          name: Build project
+          command: npm run build
+      - run:
+          name: Run tests
+          command: npm run test
       - store_test_results:
           path: test-results
       - store_artifacts:
