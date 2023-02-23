@@ -1,2 +1,2 @@
-# live-connect-handlers
-Default Implementation of handlers for live-connect
+# live-connect-common
+Interfaces and shared code for LiveConnect projects
