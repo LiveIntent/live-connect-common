@@ -10,20 +10,20 @@ export interface EventBus extends ErrorBus {
   off(name: string, callback: (event: unknown) => void): this
 }
 
-export interface ExternalReadStorageHandler {
+export interface ReadOnlyStorageHandler {
   getCookie?: (key: string) => string | null
   getDataFromLocalStorage?: (key: string) => string | null
   localStorageIsEnabled?: () => boolean
 }
 
-export interface ExternalStorageHandler extends ExternalReadStorageHandler {
+export interface StorageHandler extends ReadOnlyStorageHandler {
   setCookie?: (key: string, value: string, expires?: Date, sameSite?: string, domain?: string) => void
   setDataInLocalStorage?: (key: string, value: string) => void
   removeDataFromLocalStorage?: (key: string) => void
   findSimilarCookies?: (substring: string) => string[]
 }
 
-export interface ExternalCallHandler {
+export interface CallHandler {
   ajaxGet?: (
     url: string,
     onSuccess: (responseText: string, response?: unknown) => void,
