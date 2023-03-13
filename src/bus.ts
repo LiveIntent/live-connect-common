@@ -116,14 +116,6 @@ export class ReplayEmitter implements EventBus {
     return this
   }
 
-  emitIfEmpty(name: string, makeEvent: () => unknown): this {
-    if ((this.q[name] || []).length > 0) {
-      return this
-    } else {
-      return this.emit(name, makeEvent())
-    }
-  }
-
   off(name: string, callback: (event: unknown) => void): this {
     const handlers = this.h[name]
     const liveEvents = []
@@ -151,5 +143,18 @@ export class ReplayEmitter implements EventBus {
   emitError(name: string, exception: unknown): this {
     const wrappedError = wrapError(name, exception)
     return this.emit(ERRORS_CHANNEL, wrappedError)
+  }
+
+  ifEmpty(name: string, f: () => void): this {
+    if ((this.q[name] || []).length > 0) {
+      return this
+    } else {
+      f()
+      return this
+    }
+  }
+
+  emitIfEmpty(name: string, makeEvent: () => unknown): this {
+    this.ifEmpty(name, () => this.emit(name, makeEvent()))
   }
 }
