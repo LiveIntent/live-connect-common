@@ -1,6 +1,47 @@
-import { ERRORS_CHANNEL } from './consts'
+import { ERRORS_CHANNEL, GLOBAL_BUS } from './consts'
 import { EventBus } from './types'
-import { wrapError } from './utils'
+import { isFunction, wrapError } from './utils'
+
+export function localBus(replaySize?: number | string): EventBus {
+  return new ReplayEmitter(replaySize)
+}
+
+export function windowAttachedBus(name: string, replaySize?: number | string, errorCallback?: (error: unknown) => void): EventBus | undefined {
+  function extendBusIfNeeded(bus: EventBus) {
+    if (isFunction(bus.emitErrorWithMessage) && isFunction(bus.emitError)) {
+      return
+    }
+
+    bus.emitErrorWithMessage = function (name, message, e = {}) {
+      const wrappedError = wrapError(name, e, message)
+      return bus.emit(ERRORS_CHANNEL, wrappedError)
+    }
+
+    bus.emitError = function (name, exception) {
+      const wrappedError = wrapError(name, exception)
+      return bus.emit(ERRORS_CHANNEL, wrappedError)
+    }
+  }
+
+  try {
+    if (!window && isFunction(errorCallback)) {
+      errorCallback(new Error('Bus can only be attached to the window, which is not present'))
+    }
+    if (window && !(name in window)) {
+      window[name] = localBus(replaySize)
+    }
+    const existingBus = window[name] as EventBus
+    extendBusIfNeeded(existingBus)
+    return existingBus
+  } catch (e) {
+    console.error('events.bus.init', e)
+    if (isFunction(errorCallback)) errorCallback(e)
+  }
+}
+
+export function getGlobalBus(replaySize?: number | string, errorCallback?: (error: unknown) => void): EventBus | undefined {
+  return windowAttachedBus(GLOBAL_BUS, replaySize, errorCallback)
+}
 
 interface EventHandler {
   callback: (data: unknown) => void
@@ -12,7 +53,7 @@ export class ReplayEmitter implements EventBus {
   private q: Record<string, unknown[]>
   size: number
 
-  constructor (replaySize: number | string) {
+  constructor (replaySize?: number | string) {
     this.size = 5
 
     if (typeof replaySize === 'number') {
@@ -73,6 +114,14 @@ export class ReplayEmitter implements EventBus {
     eventQueue.push(event)
 
     return this
+  }
+
+  emitIfEmpty(name: string, makeEvent: () => unknown): this {
+    if ((this.q[name] || []).length > 0) {
+      return this
+    } else {
+      return this.emit(name, makeEvent())
+    }
   }
 
   off(name: string, callback: (event: unknown) => void): this {

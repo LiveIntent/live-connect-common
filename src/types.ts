@@ -7,6 +7,7 @@ export interface EventBus extends ErrorBus {
   on<F extends ((event: unknown) => void)>(name: string, callback: F, ctx?: ThisParameterType<F>): this
   once<F extends ((event: unknown) => void)>(name: string, callback: F, ctx?: ThisParameterType<F>): this
   emit(name: string, event: unknown): this
+  emitIfEmpty(name: string, makeEvent: () => unknown): this
   off(name: string, callback: (event: unknown) => void): this
 }
 

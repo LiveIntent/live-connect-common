@@ -1,6 +1,6 @@
 import { expect, spy, use } from 'chai'
 import chaiSpies from 'chai-spies'
-import { ReplayEmitter } from '../src/bus'
+import { getGlobalBus, ReplayEmitter } from '../src/bus'
 import { wrapError } from '../src/utils'
 import { ERRORS_CHANNEL } from '../src/consts'
 
@@ -152,5 +152,22 @@ describe('ReplayEmitter', () => {
     emitter.on('foo', reporter)
     emitter.emitError('some name', new Error('the original message'))
     expect(messages.length).to.eql(0)
+  })
+
+  it('getGlobalBus should return the same instance', () => {
+    expect(getGlobalBus()).to.eql(getGlobalBus())
+  })
+
+  it('should only emit message when empty', () => {
+    const emitter = new ReplayEmitter(5)
+    const callbackOn = spy()
+    emitter.on('test', callbackOn)
+    expect(callbackOn).to.not.have.been.called()
+
+    emitter.emitIfEmpty('test', () => 'first event')
+    expect(callbackOn).to.have.been.once.called.with.exactly('first event')
+
+    emitter.emitIfEmpty('test', () => 'second event')
+    expect(callbackOn).to.have.been.once.called()
   })
 })
