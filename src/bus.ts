@@ -7,42 +7,46 @@ interface EventHandler {
   unbound: (data: unknown) => void
 }
 
-export class ReplayEmitter implements EventBus {
-  private h: Record<string, EventHandler[]>
-  private q: Record<string, unknown[]>
+interface EmitterData {
+  h: Record<string, EventHandler[]>
+  q: Record<string, unknown[]>
   size: number
+}
+
+export class ReplayEmitter implements EventBus {
+  private data: EmitterData
 
   constructor (replaySize: number | string) {
-    this.size = 5
+    let size = 5
 
     if (typeof replaySize === 'number') {
-      this.size = replaySize
-    } else if (typeof replaySize === 'string') {
-      this.size = parseInt(replaySize) || this.size
+      size = replaySize
+    } else {
+      size = parseInt(replaySize) || size
     }
 
-    this.h = {}
-    this.q = {}
+    this.data = {
+      h: {},
+      q: {},
+      size
+    }
   }
 
   on<F extends ((event: unknown) => void)>(name: string, callback: F, ctx?: ThisParameterType<F>): this {
     const handler: EventHandler = {
       callback: callback.bind(ctx),
       unbound: callback
-    };
-
-    (this.h[name] || (this.h[name] = [])).push(handler)
-
-    const eventQueueLen = (this.q[name] || []).length
-    for (let i = 0; i < eventQueueLen; i++) {
-      callback.call(ctx, this.q[name][i])
     }
+
+    this.data = { ...this.data, h: { ...this.data.h, [name]: [...(this.data.h[name] || []), handler] } };
+
+    (this.data.q[name] || []).forEach(i => callback.call(ctx, i))
 
     return this
   }
 
   once<F extends ((event: unknown) => void)>(name: string, callback: F, ctx?: ThisParameterType<F>): this {
-    const eventQueue = this.q[name] || []
+    const eventQueue = this.data.q[name] || []
     if (eventQueue.length > 0) {
       callback.call(ctx, eventQueue[0])
       return this
@@ -58,39 +62,30 @@ export class ReplayEmitter implements EventBus {
   }
 
   emit(name: string, event: unknown): this {
-    const evtArr = (this.h[name] || []).slice()
-    let i = 0
-    const len = evtArr.length
-
-    for (i; i < len; i++) {
-      evtArr[i].callback(event)
+    (this.data.h[name] || []).forEach(i => i.callback(event))
+    const queue = this.data.q[name] || []
+    const [first, ...rest] = queue
+    this.data = {
+      ...this.data,
+      q: {
+        ...this.data.q,
+        [name]: [queue.length < this.data.size && first, ...rest, event].filter(Boolean)
+      }
     }
-
-    const eventQueue = this.q[name] || (this.q[name] = [])
-    if (eventQueue.length >= this.size) {
-      eventQueue.shift()
-    }
-    eventQueue.push(event)
 
     return this
   }
 
   off(name: string, callback: (event: unknown) => void): this {
-    const handlers = this.h[name]
-    const liveEvents = []
+    const handlers: EventHandler[] = this.data.h[name]
+    const liveEvents: EventHandler[] = (handlers && callback && handlers.filter(h => h.unbound !== callback)) || []
 
-    if (handlers && callback) {
-      for (let i = 0, len = handlers.length; i < len; i++) {
-        if (handlers[i].unbound !== callback) {
-          liveEvents.push(handlers[i])
-        }
-      }
+    if (liveEvents.length) {
+      this.data = { ...this.data, h: { ...this.data.h, [name]: liveEvents } }
+    } else {
+      const { [name]: f, ...rest } = this.data.h
+      this.data = { ...this.data, h: rest }
     }
-
-    (liveEvents.length)
-      ? this.h[name] = liveEvents
-      : delete this.h[name]
-
     return this
   }
 

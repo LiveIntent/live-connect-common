@@ -1,13 +1,11 @@
 import { expect, spy, use } from 'chai'
 import chaiSpies from 'chai-spies'
-import { ReplayEmitter } from '../src/bus'
-import { wrapError } from '../src/utils'
-import { ERRORS_CHANNEL } from '../src/consts'
+import { ReplayEmitter, wrapError, ERRORS_CHANNEL } from '../src'
 
 use(chaiSpies)
 
 describe('ReplayEmitter', () => {
-  it('should replay all stored events to a handler and coninue handling when it is attached using `on`', () => {
+  it('should replay all stored events to a handler and continue handling when it is attached using `on`', () => {
     const emitter = new ReplayEmitter(5)
     emitter.emit('test', 'first event')
     emitter.emit('other topic', 'other event')
@@ -73,7 +71,7 @@ describe('ReplayEmitter', () => {
   it('should handle misconfiguration and set default queue size', () => {
     const emitter = new ReplayEmitter('not int')
 
-    expect(emitter.size).to.be.eq(5)
+    expect(emitter.data.size).to.be.eq(5)
   })
 
   it('should properly turn off handlers with callbacks passed', () => {
@@ -85,13 +83,13 @@ describe('ReplayEmitter', () => {
     emitter.on('test', callback1)
     emitter.on('test', callback2)
 
-    expect(emitter.h.test.length).to.be.eq(2)
+    expect(emitter.data.h.test.length).to.be.eq(2)
 
     emitter.off('test', callback1)
-    expect(emitter.h.test.length).to.be.eq(1)
+    expect(emitter.data.h.test.length).to.be.eq(1)
 
     emitter.off('test', callback2)
-    expect(emitter.h.test).to.be.undefined()
+    expect(emitter.data.h.test).to.be.undefined()
   })
 
   it('should turn off all handlers when no callback passed', () => {
@@ -103,10 +101,10 @@ describe('ReplayEmitter', () => {
     emitter.on('test', callback1)
     emitter.on('test', callback2)
 
-    expect(emitter.h.test.length).to.be.eq(2)
+    expect(emitter.data.h.test.length).to.be.eq(2)
 
     emitter.off('test')
-    expect(emitter.h.test).to.be.undefined()
+    expect(emitter.data.h.test).to.be.undefined()
   })
 
   it('should wrap an exception with name, message and stack trace', () => {
