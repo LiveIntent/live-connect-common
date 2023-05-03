@@ -9,6 +9,7 @@
   "license": "Apache-2.0",
   "private": false,
   "name": "live-connect-common",
+  "type": "module",
   "engines": {
     "node": ">=18"
   },
