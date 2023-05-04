@@ -8,7 +8,7 @@
     "module": "CommonJS",
     "strict": true,
     "declaration": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
   },
   "include": ["./src/**/*", "./test/**/*"]
 }
