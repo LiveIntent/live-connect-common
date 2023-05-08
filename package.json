@@ -13,9 +13,19 @@
   "engines": {
     "node": ">=18"
   },
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "/dist/*"
+  ],
   "scripts": {
     "build": "rollup -c ./rollup.config.js",
     "test": "ts-mocha 'test/**/*.ts'",
@@ -37,6 +47,7 @@
     "@rollup/plugin-strip": "^3.0.2",
     "@rollup/plugin-typescript": "^11.1.0",
     "@types/chai": "^4.3.5",
+    "@types/chai-spies": "^1.0.3",
     "@types/compression": "^1.7.2",
     "@types/cors": "^2.8.13",
     "@types/dirty-chai": "^2.0.2",

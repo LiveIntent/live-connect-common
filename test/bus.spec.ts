@@ -44,7 +44,7 @@ describe('ReplayEmitter', () => {
 
     emitter.emit('test', 'first event')
     expect(callbackOn).to.have.been.first.called.with.exactly('first event')
-    expect(callbackOnce).to.have.been.once.called.with.exactly('first event')
+    expect(callbackOnce).to.be.called.once.called.with.exactly('first event')
 
     emitter.emit('test', 'second event')
     expect(callbackOn).to.have.been.second.called.with.exactly('second event')
@@ -71,6 +71,7 @@ describe('ReplayEmitter', () => {
   it('should handle misconfiguration and set default queue size', () => {
     const emitter = new ReplayEmitter('not int')
 
+    // @ts-expect-error
     expect(emitter.data.size).to.be.eq(5)
   })
 
@@ -83,12 +84,15 @@ describe('ReplayEmitter', () => {
     emitter.on('test', callback1)
     emitter.on('test', callback2)
 
+    // @ts-expect-error
     expect(emitter.data.h.test.length).to.be.eq(2)
 
     emitter.off('test', callback1)
+    // @ts-expect-error
     expect(emitter.data.h.test.length).to.be.eq(1)
 
     emitter.off('test', callback2)
+    // @ts-expect-error
     expect(emitter.data.h.test).to.be.undefined()
   })
 
@@ -100,10 +104,12 @@ describe('ReplayEmitter', () => {
 
     emitter.on('test', callback1)
     emitter.on('test', callback2)
-
+    // @ts-expect-error
     expect(emitter.data.h.test.length).to.be.eq(2)
 
+    // @ts-expect-error
     emitter.off('test')
+    // @ts-expect-error
     expect(emitter.data.h.test).to.be.undefined()
   })
 
@@ -123,29 +129,42 @@ describe('ReplayEmitter', () => {
 
   it('should emit error with message to error namespace', () => {
     const emitter = new ReplayEmitter(5)
+
+    // @ts-expect-error
     const ex = []
+    // @ts-expect-error
     const reporter = (error) => ex.push(error)
     emitter.on(ERRORS_CHANNEL, reporter)
     emitter.emitErrorWithMessage('some name', 'message', new Error('the original message'))
+    // @ts-expect-error
     expect(ex[0].name).to.eql('some name')
+    // @ts-expect-error
     expect(ex[0].message).to.eql('message')
+    // @ts-expect-error
     expect(ex[0].stack).to.have.string('the original message')
   })
 
   it('should emit error using the message in the exception', () => {
     const emitter = new ReplayEmitter(5)
+
+    // @ts-expect-error
     const ex = []
+    // @ts-expect-error
     const reporter = (error) => ex.push(error)
     emitter.on(ERRORS_CHANNEL, reporter)
     emitter.emitError('some name', new Error('the original message'))
+    // @ts-expect-error
     expect(ex[0].name).to.eql('some name')
+    // @ts-expect-error
     expect(ex[0].message).to.eql('the original message')
+    // @ts-expect-error
     expect(ex[0].stack).to.have.string('the original message')
   })
 
   it('should not emit error on an different namespace', () => {
     const emitter = new ReplayEmitter(5)
     const messages = []
+    // @ts-expect-error
     const reporter = (error) => messages.push(error)
     emitter.on('foo', reporter)
     emitter.emitError('some name', new Error('the original message'))

@@ -18,7 +18,7 @@ export default [{
   ],
   plugins: [
     cleaner({ targets: [OUTPUT_DIR] }),
-    ts({ tsconfig: './tsconfig.json' }),
+    ts(),
     resolve(),
     commonjs(),
     strip(),

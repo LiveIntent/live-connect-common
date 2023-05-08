@@ -17,14 +17,7 @@ export class ReplayEmitter implements EventBus {
   private data: EmitterData
 
   constructor (replaySize: number | string) {
-    let size = 5
-
-    if (typeof replaySize === 'number') {
-      size = replaySize
-    } else {
-      size = parseInt(replaySize) || size
-    }
-
+    const size = parseInt(replaySize.toString()) || 5
     this.data = {
       h: {},
       q: {},
@@ -78,12 +71,13 @@ export class ReplayEmitter implements EventBus {
 
   off(name: string, callback: (event: unknown) => void): this {
     const handlers: EventHandler[] = this.data.h[name]
-    const liveEvents: EventHandler[] = (handlers && callback && handlers.filter(h => h.unbound !== callback)) || []
+    const liveHandlers: EventHandler[] = (handlers && callback && handlers.filter(h => h.unbound !== callback)) || []
 
-    if (liveEvents.length) {
-      this.data = { ...this.data, h: { ...this.data.h, [name]: liveEvents } }
+    if (liveHandlers.length) {
+      this.data = { ...this.data, h: { ...this.data.h, [name]: liveHandlers } }
     } else {
-      const { [name]: f, ...rest } = this.data.h
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [name]: _, ...rest } = this.data.h
       this.data = { ...this.data, h: rest }
     }
     return this
