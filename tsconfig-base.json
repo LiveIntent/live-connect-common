@@ -5,10 +5,12 @@
     "types": ["mocha"],
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "module": "CommonJS",
+    "sourceMap": true,
     "strict": true,
     "declaration": true,
     "outDir": "./dist",
+    "moduleResolution": "node"
   },
-  "include": ["./src/**/*", "./test/**/*"]
+  "include": ["./src/**/*", "./test/**/*"],
+  "exclude": ["./dist"]
 }

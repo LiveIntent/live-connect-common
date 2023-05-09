@@ -1,6 +1,6 @@
 import { expect, spy, use } from 'chai'
 import chaiSpies from 'chai-spies'
-import { ReplayEmitter, wrapError, ERRORS_CHANNEL } from '../src'
+import { ERRORS_CHANNEL, ReplayEmitter, wrapError } from '../src'
 
 use(chaiSpies)
 
@@ -88,10 +88,12 @@ describe('ReplayEmitter', () => {
     expect(emitter.data.h.test.length).to.be.eq(2)
 
     emitter.off('test', callback1)
+
     // @ts-expect-error
     expect(emitter.data.h.test.length).to.be.eq(1)
 
     emitter.off('test', callback2)
+
     // @ts-expect-error
     expect(emitter.data.h.test).to.be.undefined()
   })
@@ -104,11 +106,13 @@ describe('ReplayEmitter', () => {
 
     emitter.on('test', callback1)
     emitter.on('test', callback2)
+
     // @ts-expect-error
     expect(emitter.data.h.test.length).to.be.eq(2)
 
     // @ts-expect-error
     emitter.off('test')
+
     // @ts-expect-error
     expect(emitter.data.h.test).to.be.undefined()
   })
@@ -132,14 +136,18 @@ describe('ReplayEmitter', () => {
 
     // @ts-expect-error
     const ex = []
+
     // @ts-expect-error
     const reporter = (error) => ex.push(error)
     emitter.on(ERRORS_CHANNEL, reporter)
     emitter.emitErrorWithMessage('some name', 'message', new Error('the original message'))
+
     // @ts-expect-error
     expect(ex[0].name).to.eql('some name')
+
     // @ts-expect-error
     expect(ex[0].message).to.eql('message')
+
     // @ts-expect-error
     expect(ex[0].stack).to.have.string('the original message')
   })
@@ -149,14 +157,18 @@ describe('ReplayEmitter', () => {
 
     // @ts-expect-error
     const ex = []
+
     // @ts-expect-error
     const reporter = (error) => ex.push(error)
     emitter.on(ERRORS_CHANNEL, reporter)
     emitter.emitError('some name', new Error('the original message'))
+
     // @ts-expect-error
     expect(ex[0].name).to.eql('some name')
+
     // @ts-expect-error
     expect(ex[0].message).to.eql('the original message')
+
     // @ts-expect-error
     expect(ex[0].stack).to.have.string('the original message')
   })
@@ -164,6 +176,7 @@ describe('ReplayEmitter', () => {
   it('should not emit error on an different namespace', () => {
     const emitter = new ReplayEmitter(5)
     const messages = []
+
     // @ts-expect-error
     const reporter = (error) => messages.push(error)
     emitter.on('foo', reporter)
