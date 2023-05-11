@@ -9,31 +9,30 @@
   "license": "Apache-2.0",
   "private": false,
   "name": "live-connect-common",
-  "type": "module",
   "sideEffects": false,
   "engines": {
     "node": ">=18"
   },
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
   "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/src/index.d.ts",
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./webpack.config.common.js": "./webpack.config.common.js",
+    "./webpack.config.common": "./webpack.config.common.js"
   },
   "files": [
     "/dist/*",
-    "/dist/src/*"
+    "/dist/src/*",
+    "webpack.config.common.js"
   ],
   "scripts": {
-    "build:mjs": "webpack --mode production --config ./webpack.config-mjs.js",
-    "build:cjs": "webpack --mode production --config ./webpack.config-cjs.js",
-    "build": "npm run build:cjs && npm run build:mjs",
-    "test": "ts-mocha -p ./tsconfig-js.json 'test/**/*.ts'",
+    "build": "webpack --mode production",
+    "test": "ts-mocha -p ./tsconfig-test.json 'test/**/*.ts'",
     "lint": "eslint 'src/**/*.ts' 'test/**/*.ts'",
     "fix": "eslint --fix 'src/**/*.ts' 'test/**/*.ts'",
     "release:ci:prepatch": "release-it patch --preRelease=alpha --ci",

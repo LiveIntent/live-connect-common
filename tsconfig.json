@@ -4,12 +4,14 @@
     "typeRoots": ["./node_modules/@types"],
     "types": ["mocha"],
     "esModuleInterop": true,
-    "resolveJsonModule": true,
     "sourceMap": true,
     "strict": true,
     "declaration": true,
     "outDir": "./dist",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "module": "esnext",
+    "target": "es5",
+    "lib": [ "es2018", "dom" ]
   },
   "include": ["./src/**/*", "./test/**/*"],
   "exclude": ["./dist"]

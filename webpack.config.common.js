@@ -1,27 +1,21 @@
-import path from 'path'
-import TerserPlugin from 'terser-webpack-plugin'
-import ESLintPlugin from 'eslint-webpack-plugin'
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
+const path = require('path')
+const TerserPlugin = require('terser-webpack-plugin')
+const ESLintPlugin = require('eslint-webpack-plugin')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 const OUTPUT_DIR = 'dist'
 
-export const makeConfig = (ext, lib = {}) => ({
+module.exports = (libName, compress = {}) => ({
   mode: 'production',
-  entry: {
-    'live-connect-common': './src/index.ts'
-  },
+  entry: './src/index.ts',
   module: {
     rules: [{
       test: /\.ts$/,
-      exclude: [
-        /node_modules/,
-        /\.d\.ts$/
-      ],
+      exclude: /node_modules/,
       use: {
         loader: 'ts-loader',
         options: {
-          transpileOnly: false,
-          configFile: `tsconfig-${ext}.json`
+          transpileOnly: false
         }
       }
     }]
@@ -31,13 +25,24 @@ export const makeConfig = (ext, lib = {}) => ({
     extensions: ['.ts', '.js']
   },
   output: {
-    filename: `index.${ext}`,
+    filename: 'index.js',
     path: path.resolve('.', OUTPUT_DIR),
-    ...lib
+    library: libName,
+    libraryTarget: 'umd',
+    clean: true,
+    globalObject: 'this'
   },
   optimization: {
     minimize: true,
-    minimizer: [new TerserPlugin()]
+    minimizer: [new TerserPlugin({
+      terserOptions: {
+        compress: {
+          typeofs: false,
+          ...compress
+        },
+        safari10: true
+      }
+    })]
   },
   plugins: [
     new ESLintPlugin(),
@@ -46,7 +51,6 @@ export const makeConfig = (ext, lib = {}) => ({
       typescript: {
         mode: 'write-dts',
         build: true,
-        configFile: `tsconfig-${ext}.json`,
         configOverwrite: {
           compilerOptions: {
             declarationMap: true
