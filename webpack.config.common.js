@@ -1,6 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path')
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const TerserPlugin = require('terser-webpack-plugin')
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const ESLintPlugin = require('eslint-webpack-plugin')
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 const OUTPUT_DIR = 'dist'
@@ -12,12 +16,12 @@ module.exports = (libName, compress = {}) => ({
     rules: [{
       test: /\.ts$/,
       exclude: /node_modules/,
-      use: {
+      use: [{
         loader: 'ts-loader',
         options: {
           transpileOnly: false
         }
-      }
+      }]
     }]
   },
   devtool: 'source-map',
@@ -27,8 +31,10 @@ module.exports = (libName, compress = {}) => ({
   output: {
     filename: 'index.js',
     path: path.resolve('.', OUTPUT_DIR),
-    library: libName,
-    libraryTarget: 'umd',
+    library: {
+      name: libName,
+      type: 'umd'
+    },
     clean: true,
     globalObject: 'this'
   },
@@ -36,6 +42,8 @@ module.exports = (libName, compress = {}) => ({
     minimize: true,
     minimizer: [new TerserPlugin({
       terserOptions: {
+        ecma: 5,
+        module: true,
         compress: {
           typeofs: false,
           ...compress

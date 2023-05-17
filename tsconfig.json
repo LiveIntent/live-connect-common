@@ -5,13 +5,14 @@
     "types": ["mocha"],
     "esModuleInterop": true,
     "sourceMap": true,
+    "importHelpers": false,
     "strict": true,
     "declaration": true,
     "outDir": "./dist",
     "moduleResolution": "node",
-    "module": "esnext",
+    "module": "es6",
     "target": "es5",
-    "lib": [ "es2018", "dom" ]
+    "lib": [ "es5", "dom" ]
   },
   "include": ["./src/**/*", "./test/**/*"],
   "exclude": ["./dist"]

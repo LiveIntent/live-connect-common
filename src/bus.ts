@@ -57,12 +57,11 @@ export class ReplayEmitter implements EventBus {
   emit(name: string, event: unknown): this {
     (this.data.h[name] || []).forEach(i => i.callback(event))
     const queue = this.data.q[name] || []
-    const [first, ...rest] = queue
     this.data = {
       ...this.data,
       q: {
         ...this.data.q,
-        [name]: [queue.length < this.data.size && first, ...rest, event].filter(Boolean)
+        [name]: [...(queue.length < this.data.size ? queue : queue.slice(1)), event]
       }
     }
 
