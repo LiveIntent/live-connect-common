@@ -23,16 +23,18 @@
     },
     "./package.json": "./package.json",
     "./webpack.config.common.js": "./webpack.config.common.js",
-    "./webpack.config.common": "./webpack.config.common.js"
+    "./webpack.config.common": "./webpack.config.common.js",
+    "./webpack.config.base": "./webpack.config.base.js"
   },
   "files": [
     "/dist/*",
     "/dist/src/*",
-    "webpack.config.common.js"
+    "webpack.config.common.js",
+    "webpack.config.base.js"
   ],
   "scripts": {
     "build": "webpack --mode production",
-    "test": "ts-mocha -p ./tsconfig-test.json 'test/**/*.ts'",
+    "test": "ts-mocha 'test/**/*.ts'",
     "lint": "eslint 'src/**/*.ts' 'test/**/*.ts'",
     "fix": "eslint --fix 'src/**/*.ts' 'test/**/*.ts'",
     "release:ci:prepatch": "release-it patch --preRelease=alpha --ci",
@@ -83,6 +85,13 @@
     "tslib": "^2.5.0",
     "typescript": "^5.0.4",
     "webpack": "^5.83.0",
+    "webpack-bundle-analyzer": "^4.8.0",
     "webpack-cli": "^5.1.1"
+  },
+  "dependencies": {
+    "@babel/core": "^7.21.8",
+    "@babel/preset-env": "^7.21.5",
+    "@babel/preset-typescript": "^7.21.5",
+    "source-map-loader": "^4.0.1"
   }
 }

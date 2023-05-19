@@ -8,11 +8,11 @@
     "importHelpers": false,
     "strict": true,
     "declaration": true,
+    "isolatedModules": true,
     "outDir": "./dist",
     "moduleResolution": "node",
-    "module": "es6",
-    "target": "es5",
-    "lib": [ "es5", "dom" ]
+    "module": "NodeNext",
+    "target": "ES5"
   },
   "include": ["./src/**/*", "./test/**/*"],
   "exclude": ["./dist"]
