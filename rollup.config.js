@@ -1,26 +1,26 @@
-import resolve from 'rollup-plugin-node-resolve'
-import strip from '@rollup/plugin-strip'
-import ts from "rollup-plugin-ts";
-import cleaner from 'rollup-plugin-cleaner'
-import mjsEntry from 'rollup-plugin-mjs-entry'
-import commonjs from 'rollup-plugin-commonjs';
-
+const strip = require('@rollup/plugin-strip')
+const ts = require('@rollup/plugin-typescript')
+const cleaner = require('rollup-plugin-cleaner')
+const mjsEntry = require('rollup-plugin-mjs-entry')
+const commonjs = require('@rollup/plugin-commonjs')
+const resolve = require('@rollup/plugin-node-resolve')
 const OUTPUT_DIR = './dist'
 
-export default {
+module.exports = {
   input: './src/index.ts',
   output: [
     {
       file: `${OUTPUT_DIR}/index.js`,
-      format: 'cjs'
+      format: 'cjs',
+      sourcemap: true
     }
   ],
   plugins: [
     cleaner({targets: [OUTPUT_DIR]}),
     ts(),
     resolve(),
-    commonjs(),
+    commonjs({ sourceMap: true }),
     strip(),
-    mjsEntry() // https://nodejs.org/api/packages.html#packages_dual_commonjs_es_module_packages
+    mjsEntry({ includeDefault: true }) // https://nodejs.org/api/packages.html#packages_dual_commonjs_es_module_packages
   ]
 }

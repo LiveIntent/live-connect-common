@@ -5,9 +5,12 @@
     "types": ["mocha"],
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "module": "CommonJS",
+    "module": "ESNext",
     "strict": true,
     "declaration": true,
+    "sourceMap": true,
+    "moduleResolution": "Node",
+    "outDir": "./dist"
   },
   "include": ["./src/**/*", "./test/**/*"]
 }
