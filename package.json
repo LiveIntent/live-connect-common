@@ -9,6 +9,7 @@
   "license": "Apache-2.0",
   "private": false,
   "name": "live-connect-common",
+  "type": "commonjs",
   "engines": {
     "node": ">=18"
   },
@@ -22,21 +23,20 @@
       "import": "./dist/index.mjs"
     },
     "./package.json": "./package.json",
-    "./rollup.common": "./rollup.config.js"
+    "./rollup.common": "./rollup.config.mjs"
   },
   "files": [
     "dist/*",
-    "./rollup.config.js"
+    "rollup.config.mjs"
   ],
   "scripts": {
-    "build": "rollup -c ./rollup.config.js",
+    "build": "rollup -c rollup.config.mjs",
     "test": "ts-mocha -p ./tsconfig-test.json 'test/**/*.ts'",
     "lint": "eslint 'src/**/*.ts' 'test/**/*.ts'",
     "fix": "eslint --fix 'src/**/*.ts' 'test/**/*.ts'",
     "release:ci:prepatch": "release-it patch --preRelease=alpha-$(git rev-parse --short HEAD) --ci",
     "release:ci:preminor": "release-it minor --preRelease=alpha-$(git rev-parse --short HEAD) --ci",
     "release:ci:premajor": "release-it major --preRelease=alpha-$(git rev-parse --short HEAD) --ci",
-    "release:ci:bump-prerelease": "release-it --preRelease --ci",
     "release:ci:alpha->beta": "release-it --preRelease=beta --ci",
     "release:ci:beta->rc": "release-it --preRelease=rc --ci",
     "release:ci:patch": "release-it patch --ci",
