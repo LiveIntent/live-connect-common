@@ -4,6 +4,7 @@ import cleaner from 'rollup-plugin-cleaner'
 import mjsEntry from 'rollup-plugin-mjs-entry'
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
+
 const OUTPUT_DIR = './dist'
 
 export default {
@@ -21,6 +22,6 @@ export default {
     resolve(),
     commonjs({ sourceMap: true }),
     strip(),
-    mjsEntry({ includeDefault: true }) // https://nodejs.org/api/packages.html#packages_dual_commonjs_es_module_packages
+    mjsEntry() // https://nodejs.org/api/packages.html#packages_dual_commonjs_es_module_packages
   ]
 }

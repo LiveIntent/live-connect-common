@@ -22,12 +22,10 @@
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
     },
-    "./package.json": "./package.json",
-    "./rollup.common": "./rollup.config.mjs"
+    "./package.json": "./package.json"
   },
   "files": [
-    "dist/*",
-    "rollup.config.mjs"
+    "dist/*"
   ],
   "scripts": {
     "build": "rollup -c rollup.config.mjs",
