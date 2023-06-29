@@ -6,7 +6,7 @@ orbs:
 parameters:
   node_version:
     type: string
-    default: "12.22.11"
+    default: "18.16.0"
 
 references:
   releasable_branches: &releasable_branches
@@ -107,9 +107,6 @@ workflows:
           type: approval
           requires:
             - build_and_test
-          filters:
-            branches:
-              only: *releasable_branches
 
       - release:
           context: live-connect
@@ -123,9 +120,6 @@ workflows:
           type: approval
           requires:
             - build_and_test
-          filters:
-            branches:
-              only: *releasable_branches
 
       - release:
           context: live-connect
@@ -139,9 +133,6 @@ workflows:
           type: approval
           requires:
             - build_and_test
-          filters:
-            branches:
-              only: master
 
       - release:
           context: live-connect
@@ -149,22 +140,6 @@ workflows:
           increment: "premajor"
           requires:
             - release_premajor?
-
-      - release_bump-prerelease?:
-          context: live-connect
-          type: approval
-          requires:
-            - build_and_test
-          filters:
-            branches:
-              only: *releasable_branches
-
-      - release:
-          context: live-connect
-          name: release_bump-prerelease
-          increment: "bump-prerelease"
-          requires:
-            - release_bump-prerelease?
 
       - release_alpha->beta?:
           context: live-connect
