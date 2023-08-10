@@ -13,10 +13,20 @@ references:
   releasable_branch: &releasable_branch
     branches:
       only: master
+    tags:
+      only: /^$/
+
+  prereleasable_branch: &prereleasable_branch
+    branches:
+      ignore: /dependabot\/.*/
+    tags:
+      only: /^$/
 
   update_pr: &update_pr
     branches:
       only: /dependabot\/.*/
+    tags:
+      only: /^$/
 
   untagged_commit: &untagged_commit
     tags:
@@ -127,7 +137,7 @@ workflows:
           requires:
             - build_and_test
           filters:
-            <<: *releasable_branch
+            <<: *prereleasable_branch
 
       - release:
           context: live-connect
@@ -142,7 +152,7 @@ workflows:
           requires:
             - build_and_test
           filters:
-            <<: *releasable_branch
+            <<: *prereleasable_branch
 
       - release:
           context: live-connect
@@ -157,7 +167,7 @@ workflows:
           requires:
             - build_and_test
           filters:
-            <<: *releasable_branch
+            <<: *prereleasable_branch
 
       - release:
           context: live-connect
