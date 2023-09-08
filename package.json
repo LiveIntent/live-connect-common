@@ -5,7 +5,7 @@
     "url": "https://github.com/liveintent/live-connect-common"
   },
   "description": "Interfaces and basic functionality for LiveConnect projects",
-  "version": "3.0.2-alpha-28041dd.0",
+  "version": "3.0.1-alpha-2ef8d07.0",
   "license": "Apache-2.0",
   "private": false,
   "name": "live-connect-common",
@@ -13,13 +13,13 @@
   "engines": {
     "node": ">=18"
   },
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
+      "require": "./dist/index.js",
       "import": "./dist/index.mjs"
     },
     "./package.json": "./package.json"
