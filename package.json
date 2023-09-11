@@ -5,7 +5,7 @@
     "url": "https://github.com/liveintent/live-connect-common"
   },
   "description": "Interfaces and basic functionality for LiveConnect projects",
-  "version": "3.0.0",
+  "version": "3.0.1-alpha-2ef8d07.1",
   "license": "Apache-2.0",
   "private": false,
   "name": "live-connect-common",
@@ -18,7 +18,7 @@
   "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/src/index.d.ts",
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
     },
@@ -35,6 +35,7 @@
     "release:ci:prepatch": "release-it patch --preRelease=alpha-$(git rev-parse --short HEAD) --ci",
     "release:ci:preminor": "release-it minor --preRelease=alpha-$(git rev-parse --short HEAD) --ci",
     "release:ci:premajor": "release-it major --preRelease=alpha-$(git rev-parse --short HEAD) --ci",
+    "release:ci:bump-prerelease": "release-it --preRelease --ci",
     "release:ci:alpha->beta": "release-it --preRelease=beta --ci",
     "release:ci:beta->rc": "release-it --preRelease=rc --ci",
     "release:ci:patch": "release-it patch --ci",
@@ -42,9 +43,8 @@
     "release:ci:major": "release-it major --ci"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^25.0.2",
-    "@rollup/plugin-node-resolve": "^15.1.0",
     "@rollup/plugin-strip": "^3.0.2",
+    "@rollup/plugin-terser": "^0.4.3",
     "@rollup/plugin-typescript": "^11.1.1",
     "@types/chai": "^4.3.5",
     "@types/compression": "^1.7.2",
@@ -71,6 +71,8 @@
     "release-it": "^16.1.4",
     "rollup": "^3.25.3",
     "rollup-plugin-cleaner": "^1.0.0",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-dts": "^6.0.1",
     "rollup-plugin-mjs-entry": "^0.1.1",
     "serialize-javascript": ">=6.0.1",
     "sinon": "^15.2.0",
