@@ -5,8 +5,8 @@ export const UUID = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
 const uuidRegex = new RegExp(`^${UUID}$`, 'i')
 const hasTrim = !!String.prototype.trim
 
-export function onNonNull<A, B>(value: A, fn: (value: NonNullable<A>) => B): null | undefined | B {
-  return value != null ? fn(value) : (value as null | undefined)
+export function onNonNull<A, B>(value: A, fn: (value: NonNullable<A>) => B): Exclude<A, NonNullable<A>> | B {
+  return value != null ? fn(value) : (value as Exclude<A, NonNullable<A>>)
 }
 
 export function safeToString(value: unknown): string {
