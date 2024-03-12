@@ -1,9 +1,10 @@
-// @ts-nocheck
-import { expect, spy, use } from 'chai'
+import chai from 'chai'
 import chaiSpies from 'chai-spies'
-import { ERRORS_CHANNEL, ReplayEmitter, wrapError } from '../src'
+import { ERRORS_CHANNEL, ReplayEmitter, wrapError } from '../src/index.js'
 
-use(chaiSpies)
+chai.use(chaiSpies)
+
+const { expect, spy } = chai
 
 describe('ReplayEmitter', () => {
   it('should replay all stored events to a handler and continue handling when it is attached using `on`', () => {
@@ -71,7 +72,7 @@ describe('ReplayEmitter', () => {
   it('should handle misconfiguration and set default queue size', () => {
     const emitter = new ReplayEmitter('not int')
 
-    expect(emitter.data.size).to.be.eq(5)
+    expect(getEmitterData(emitter).size).to.be.eq(5)
   })
 
   it('should properly turn off handlers with callbacks passed', () => {
@@ -83,15 +84,15 @@ describe('ReplayEmitter', () => {
     emitter.on('test', callback1)
     emitter.on('test', callback2)
 
-    expect(emitter.data.h.test.length).to.be.eq(2)
+    expect(getEmitterData(emitter).h.test.length).to.be.eq(2)
 
     emitter.off('test', callback1)
 
-    expect(emitter.data.h.test.length).to.be.eq(1)
+    expect(getEmitterData(emitter).h.test.length).to.be.eq(1)
 
     emitter.off('test', callback2)
 
-    expect(emitter.data.h.test).to.be.undefined()
+    expect(getEmitterData(emitter).h.test).to.be.undefined()
   })
 
   it('should turn off all handlers when no callback passed', () => {
@@ -103,11 +104,11 @@ describe('ReplayEmitter', () => {
     emitter.on('test', callback1)
     emitter.on('test', callback2)
 
-    expect(emitter.data.h.test.length).to.be.eq(2)
+    expect(getEmitterData(emitter).h.test.length).to.be.eq(2)
 
     emitter.off('test')
 
-    expect(emitter.data.h.test).to.be.undefined()
+    expect(getEmitterData(emitter).h.test).to.be.undefined()
   })
 
   it('should wrap an exception with name, message and stack trace', () => {
@@ -127,9 +128,12 @@ describe('ReplayEmitter', () => {
   it('should emit error with message to error namespace', () => {
     const emitter = new ReplayEmitter(5)
 
-    const ex = []
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ex: any[] = []
 
-    const reporter = (error) => ex.push(error)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const reporter = (error: any) => ex.push(error)
+
     emitter.on(ERRORS_CHANNEL, reporter)
     emitter.emitErrorWithMessage('some name', 'message', new Error('the original message'))
 
@@ -143,9 +147,12 @@ describe('ReplayEmitter', () => {
   it('should emit error using the message in the exception', () => {
     const emitter = new ReplayEmitter(5)
 
-    const ex = []
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ex: any[] = []
 
-    const reporter = (error) => ex.push(error)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const reporter = (error: any) => ex.push(error)
+
     emitter.on(ERRORS_CHANNEL, reporter)
     emitter.emitError('some name', new Error('the original message'))
 
@@ -165,3 +172,9 @@ describe('ReplayEmitter', () => {
     expect(messages.length).to.eql(0)
   })
 })
+
+function getEmitterData(emitter: ReplayEmitter) {
+  // @ts-expect-error
+  const emmiterData = emitter.data
+  return emmiterData
+}

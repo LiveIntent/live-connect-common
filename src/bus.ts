@@ -1,6 +1,6 @@
-import { ERRORS_CHANNEL } from './consts'
-import { EventBus } from './types'
-import { wrapError } from './utils'
+import { ERRORS_CHANNEL } from './consts.js'
+import { EventBus } from './types.js'
+import { wrapError } from './utils.js'
 
 interface EventHandler {
   callback: (data: unknown) => void
@@ -68,7 +68,7 @@ export class ReplayEmitter implements EventBus {
     return this
   }
 
-  off(name: string, callback: (event: unknown) => void): this {
+  off(name: string, callback?: (event: unknown) => void): this {
     const handlers: EventHandler[] = this.data.h[name]
     const liveHandlers: EventHandler[] = (handlers && callback && handlers.filter(h => h.unbound !== callback)) || []
 

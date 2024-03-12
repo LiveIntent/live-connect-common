@@ -1,5 +1,5 @@
 import { expect, use } from 'chai'
-import * as utils from '../src/utils'
+import * as utils from '../src/utils.js'
 import dirtyChai from 'dirty-chai'
 
 use(dirtyChai)
