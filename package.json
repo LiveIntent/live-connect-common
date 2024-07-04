@@ -44,6 +44,7 @@
     "release:ci:major": "release-it major --ci"
   },
   "devDependencies": {
+    "@kineticcafe/rollup-plugin-delete": "^3.0.0",
     "@rollup/plugin-strip": "^3.0.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/chai": "^4.3.16",
@@ -62,7 +63,6 @@
     "release-it": "^17.4.1",
     "rollup": "^4.18.0",
     "rollup-plugin-cleaner": "^1.0.0",
-    "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-dts": "^6.1.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
