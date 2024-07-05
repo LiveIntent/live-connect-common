@@ -54,7 +54,8 @@
     "chai": "^4.4.1",
     "chai-spies": "^1.1.0",
     "dirty-chai": "^2.0.1",
-    "eslint": "^9.6.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-typescript-formatter": "^0.0.2",
     "glob": "^10.4.2",
     "mocha": "^10.6.0",
     "mocha-junit-reporter": "^2.2.1",
@@ -63,6 +64,7 @@
     "rollup-plugin-cleaner": "^1.0.0",
     "rollup-plugin-dts": "^6.1.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^7.15.0"
   }
 }
