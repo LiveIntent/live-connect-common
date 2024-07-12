@@ -7,7 +7,7 @@ orbs:
 parameters:
   node_version:
     type: string
-    default: "18.16.0"
+    default: "20.15.0"
 
 references:
   releasable_branch: &releasable_branch
