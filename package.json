@@ -46,7 +46,7 @@
   "devDependencies": {
     "@kineticcafe/rollup-plugin-delete": "^3.0.0",
     "@rollup/plugin-strip": "^3.0.4",
-    "@rollup/plugin-typescript": "^11.1.6",
+    "@rollup/plugin-typescript": "^12.1.0",
     "@types/chai": "^4.3.16",
     "@types/chai-spies": "^1.0.6",
     "@types/dirty-chai": "^2.0.4",
