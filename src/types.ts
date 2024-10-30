@@ -1,3 +1,5 @@
+export type Headers = Record<string, string | undefined>
+
 export interface ErrorBus {
   emitErrorWithMessage(name: string, message: string, e?: unknown): this
   emitError(name: string, exception?: unknown): this
@@ -28,7 +30,8 @@ export interface CallHandler {
     url: string,
     onSuccess: (responseText: string, response?: unknown) => void,
     onError?: (error: unknown) => void,
-    timeout?: number
+    timeout?: number,
+    headers?: Headers
   ) => void
   pixelGet?: (
     url: string,
