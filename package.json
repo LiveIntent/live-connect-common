@@ -59,7 +59,7 @@
     "glob": "^11.0.0",
     "mocha": "^11.0.1",
     "mocha-junit-reporter": "^2.2.1",
-    "release-it": "^17.5.0",
+    "release-it": "^18.0.0",
     "rollup": "^4.18.1",
     "rollup-plugin-cleaner": "^1.0.0",
     "rollup-plugin-dts": "^6.1.1",
